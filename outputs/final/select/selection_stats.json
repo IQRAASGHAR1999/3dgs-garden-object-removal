@@ -1,0 +1,34 @@
+{
+  "gaussians": 5834784,
+  "cameras": 185,
+  "views_used": 185,
+  "candidates": 68165,
+  "core": 68088,
+  "removed": 70199,
+  "scene_centre": [
+    0.4145426095066402,
+    1.5089258293483372,
+    1.096812806692281
+  ],
+  "camera_radius": 4.1582220879847505,
+  "eps": 0.041582220879847503,
+  "params": {
+    "source": "/home/iqra/Documents/applications/tu-wien/wimmer-task/data/garden",
+    "images": "images_4",
+    "ply": "/home/iqra/Documents/applications/tu-wien/wimmer-task/models/garden/point_cloud/iteration_30000/point_cloud.ply",
+    "masks": "/home/iqra/Documents/applications/tu-wien/wimmer-task/outputs/final/seg/masks",
+    "out": "/home/iqra/Documents/applications/tu-wien/wimmer-task/outputs/final/select",
+    "model_in": "/home/iqra/Documents/applications/tu-wien/wimmer-task/models/garden",
+    "model_out": "/home/iqra/Documents/applications/tu-wien/wimmer-task/models/garden_removed",
+    "iteration": 30000,
+    "ratio": 0.7,
+    "ratio_grow": 0.5,
+    "min_views": 10,
+    "eps_frac": 0.01,
+    "min_samples": 10,
+    "min_cluster": 500,
+    "near": 0.2,
+    "chunk": 2000000,
+    "area_tol": 2.5
+  }
+}
