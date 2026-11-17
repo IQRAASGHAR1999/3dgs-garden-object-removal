@@ -248,16 +248,6 @@ ffmpeg -y -framerate 12 -i ../models/garden/train/ours_30000/renders/%05d.png \
        -c:v libx264 -pix_fmt yuv420p ../outputs/video/before_after.mp4
 ```
 
-### 5.3 Runtimes on the test machine
-
-| Step | Time |
-|---|---|
-| Masks (185 views) | `<fill in>` |
-| Gaussian selection | `<fill in>` |
-| Plane fit and clean-up | `<fill in>` |
-| Plate replacement | `<fill in>` |
-| Two renders | `<fill in>` |
-
 
 ## 7. Approaches I tried
 
