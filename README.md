@@ -171,6 +171,7 @@ A quick check that the pretrained model renders:
 cd ~/wimmer-task/gaussian-splatting
 python render.py -m ../models/garden -s ../data/garden -r 2 --skip_test
 ```
+```mermaid
 graph LR
     inputs["Pretrained 3DGS model, 185 posed images, 2 text prompts"]
     masks["1. Masks: object masks in every view from the prompts"]
@@ -184,6 +185,7 @@ graph LR
     select --> cleanup
     cleanup --> plate
     plate --> result
+```
 ## 5. Running the pipeline
 
 ### 5.1 Everything at once
