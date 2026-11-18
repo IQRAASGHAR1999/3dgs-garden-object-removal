@@ -171,7 +171,59 @@ A quick check that the pretrained model renders:
 cd ~/wimmer-task/gaussian-splatting
 python render.py -m ../models/garden -s ../data/garden -r 2 --skip_test
 ```
+```mermaid
+flowchart TD
+    subgraph IN["Inputs"]
+        M["Pretrained 3DGS garden model<br/>5,834,784 Gaussians"]
+        I["185 images (images_4)<br/>with COLMAP camera poses"]
+        T["Two text prompts<br/>'a potted plant.' and 'a vase.'"]
+    end
 
+    subgraph S1["1. Masks per view (segment_views.py)"]
+        A1["Table centre: point closest to<br/>all camera viewing axes"]
+        A2["Grounding DINO: candidate boxes<br/>for each prompt"]
+        A3["Keep the box that contains the<br/>projected table centre"]
+        A4["SAM: mask inside the box<br/>prompts combined, dilated 7 px"]
+        A1 --> A3
+        A2 --> A3 --> A4
+    end
+
+    subgraph S2["2. Select the object's Gaussians (select_gaussians.py)"]
+        B1["Project every Gaussian centre<br/>into all 185 views"]
+        B2["Vote: inside the mask in at least 70%<br/>of visible views, seen in 10 or more"]
+        B3["DBSCAN: keep the cluster<br/>nearest the table centre"]
+        B4["Grow: add nearby Gaussians<br/>with at least 50% of the votes"]
+        B1 --> B2 --> B3 --> B4
+    end
+
+    subgraph S3["3. Table plane and clean-up (refine_removal.py)"]
+        C1["Up direction from the cameras"]
+        C2["RANSAC plane on solid table<br/>Gaussians around the object"]
+        C3["Remove what remains above the plane<br/>inside a cylinder around the pot"]
+        C1 --> C2 --> C3
+    end
+
+    subgraph S4["4. Rebuild the metal plate (replace_plate.py)"]
+        D1["Plate radius from the grey vs brown<br/>colour profile of table Gaussians"]
+        D2["Remove the old plate and the<br/>dark area under the pot"]
+        D3["Grid of flat Gaussians at the<br/>measured plate height"]
+        D4["Fit one shared view-dependent colour<br/>to the photos, pot masked out"]
+        D1 --> D2 --> D3 --> D4
+    end
+
+    OUT["Edited 3DGS model<br/>rendered with the unmodified render.py"]
+
+    I --> A1
+    I --> A2
+    T --> A2
+    M --> B1
+    A4 -- "185 masks" --> B2
+    B4 -- "removed set" --> C2
+    C3 -- "plane.json" --> D1
+    A4 -- "masks" --> D4
+    I -- "photos" --> D4
+    D4 --> OUT
+```
 ## 5. Running the pipeline
 
 ### 5.1 Everything at once
